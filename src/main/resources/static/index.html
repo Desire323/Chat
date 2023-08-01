@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Client</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<div id="messages"></div>
+<form id="message-form">
+    <input type="number" id="senderId" placeholder="Your ID">
+    <input type="number" id="receiverId" placeholder="Receiver's ID">
+    <input type="text" id="message" placeholder="Message">
+    <button type="submit">Send</button>
+</form>
+<script>
+    var socket = new SockJS('http://localhost:8080/ws');
+    var stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/messages', function (message) {
+            var messageElement = document.createElement('p');
+            messageElement.textContent = JSON.parse(message.body).content;
+            document.getElementById('messages').appendChild(messageElement);
+        });
+    });
+
+    document.getElementById('message-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        var senderId = document.getElementById('senderId').value;
+        var receiverId = document.getElementById('receiverId').value;
+        var content = document.getElementById('message').value;
+        stompClient.send("/app/chat", {}, JSON.stringify({'senderId': senderId, 'receiverId': receiverId, 'content': content}));
+    });
+</script>
+</body>
+</html>

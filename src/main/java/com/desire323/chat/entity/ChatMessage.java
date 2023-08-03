@@ -54,5 +54,11 @@ public class ChatMessage {
     public void setMessage(String message) {
         this.message = message;
     }
+    public Instant getTimestamp() {
+        return timestamp;
+    }
+    public void setTimestamp(Instant timestamp) {
+        this.timestamp = timestamp;
+    }
 }
 

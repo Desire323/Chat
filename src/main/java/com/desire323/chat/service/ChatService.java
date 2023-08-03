@@ -65,9 +65,6 @@ public class ChatService {
 
     public List<ChatMessage> getAllMessages(String conversationId) {
         List<ChatMessage> messages = chatRepository.getMessagesByConversationId(UUID.fromString(conversationId));
-        for (int i = 0; i< messages.size(); i++){
-            System.out.println(messages.get(i).getMessage());
-        }
         return messages;
     }
 }

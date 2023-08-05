@@ -17,19 +17,16 @@ public class ChatService {
     }
 
     public void saveMessage(ChatMessage message) {
-        // Get the existing conversation ID
         Optional<UUID> optionalConversationId;
-        if ( message.getSenderId() > message.getReceiverId()) {
+        if (message.getSenderId() > message.getReceiverId()) {
             optionalConversationId = chatRepository.getConversationId(message.getReceiverId(), message.getSenderId());
-        }
-        else {
+        } else {
             optionalConversationId = chatRepository.getConversationId(message.getSenderId(), message.getReceiverId());
         }
         UUID conversationId;
         if (optionalConversationId.isEmpty()) {
             conversationId = UUID.randomUUID();
-        }
-        else {
+        } else {
             conversationId = optionalConversationId.get();
         }
 
@@ -66,5 +63,10 @@ public class ChatService {
     public List<ChatMessage> getAllMessages(String conversationId) {
         List<ChatMessage> messages = chatRepository.getMessagesByConversationId(UUID.fromString(conversationId));
         return messages;
+    }
+
+    public Optional<ChatMessage> getLastMessage(String conversationId) {
+        return chatRepository.getLastMessage(UUID.fromString(conversationId));
+
     }
 }

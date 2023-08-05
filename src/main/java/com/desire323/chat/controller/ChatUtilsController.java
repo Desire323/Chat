@@ -2,6 +2,7 @@ package com.desire323.chat.controller;
 
 import com.desire323.chat.entity.ChatMessage;
 import com.desire323.chat.service.ChatService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,15 @@ public class ChatUtilsController {
     @GetMapping("/messages/{conversationId}")
     public List<ChatMessage> getMessages(@PathVariable String conversationId) {
         return chatService.getAllMessages(conversationId);
+    }
+
+    @GetMapping("/messages/{conversationId}/last")
+    public ResponseEntity<ChatMessage> getLastMessage(@PathVariable String conversationId) {
+        Optional<ChatMessage> optionalLastMessage = chatService.getLastMessage(conversationId);
+        if (optionalLastMessage.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(optionalLastMessage.get());
     }
 
 }

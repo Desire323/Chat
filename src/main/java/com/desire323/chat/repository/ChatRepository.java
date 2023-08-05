@@ -8,7 +8,13 @@ import java.util.UUID;
 
 public interface ChatRepository {
     void saveMessage(ChatMessage message);
+
     void setConversationId(int senderId, int receiverId, UUID conversationId);
+
     Optional<UUID> getConversationId(int senderId, int receiverId);
+
     List<ChatMessage> getMessagesByConversationId(UUID conversationId);
+
+    Optional<ChatMessage> getLastMessage(UUID conversationId);
+
 }

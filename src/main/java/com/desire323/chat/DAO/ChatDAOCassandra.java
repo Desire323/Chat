@@ -37,7 +37,6 @@ public class ChatDAOCassandra implements ChatRepository {
         cqlSession.execute(boundStatementLookup);
     }
 
-    @Override
     public Optional<UUID> getConversationId(int senderId, int receiverId) {
         PreparedStatement ps = cqlSession.prepare(
                 "SELECT conversation_id FROM conversation_lookup WHERE sender_id = ? AND receiver_id = ?");
@@ -63,6 +62,20 @@ public class ChatDAOCassandra implements ChatRepository {
             System.out.println("Mapped message: " + message);
             return message;
         }).collect(Collectors.toList());
+    }
+
+    public Optional<ChatMessage> getLastMessage(UUID conversationId) {
+        PreparedStatement ps = cqlSession.prepare(
+                "SELECT * FROM chat WHERE conversation_id = ? ORDER BY timestamp DESC LIMIT 1");
+        BoundStatement boundStatement = ps.bind(conversationId);
+        Row row = cqlSession.execute(boundStatement).one();
+        return row != null ? Optional.of(new ChatMessage(
+                row.getUuid("conversation_id"),
+                row.getInt("sender_id"),
+                row.getInt("receiver_id"),
+                row.getInstant("timestamp"),
+                row.getString("message")
+        )) : Optional.empty();
     }
 }
 

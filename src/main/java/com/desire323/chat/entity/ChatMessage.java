@@ -9,24 +9,29 @@ public class ChatMessage {
     private int receiverId;
     private Instant timestamp;
     private String message;
+    private String messageType;
 
-    public ChatMessage(UUID conversationId, int senderId, int receiverId, String message) {
+    public ChatMessage(UUID conversationId, int senderId, int receiverId, String message, String messageType) {
         this.conversationId = conversationId;
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.message = message;
+        this.messageType = messageType;
     }
 
     public ChatMessage() {
     }
 
-    public ChatMessage(UUID conversationId, int senderId, int receiverId, Instant timestamp, String message) {
+    public ChatMessage(UUID conversationId, int senderId, int receiverId, Instant timestamp, String message, String messageType) {
         this.conversationId = conversationId;
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.timestamp = timestamp;
         this.message = message;
+        this.messageType = messageType;
     }
+
+    // getters and setters
 
     public UUID getConversationId() {
         return conversationId;
@@ -67,5 +72,12 @@ public class ChatMessage {
     public void setTimestamp(Instant timestamp) {
         this.timestamp = timestamp;
     }
-}
 
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+}

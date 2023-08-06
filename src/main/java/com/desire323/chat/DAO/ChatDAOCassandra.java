@@ -24,8 +24,8 @@ public class ChatDAOCassandra implements ChatRepository {
 
     public void saveMessage(ChatMessage message) {
         PreparedStatement psChat = cqlSession.prepare(
-                "INSERT INTO chat (conversation_id, sender_id, receiver_id, timestamp, message) VALUES (?, ?, ?, ?, ?)");
-        BoundStatement boundStatementChat = psChat.bind(message.getConversationId(), message.getSenderId(), message.getReceiverId(), Instant.now(), message.getMessage());
+                "INSERT INTO chat (conversation_id, sender_id, receiver_id, timestamp, message, message_type) VALUES (?, ?, ?, ?, ?, ?)");
+        BoundStatement boundStatementChat = psChat.bind(message.getConversationId(), message.getSenderId(), message.getReceiverId(), Instant.now(), message.getMessage(), message.getMessageType());
         cqlSession.execute(boundStatementChat);
 
     }
@@ -57,7 +57,8 @@ public class ChatDAOCassandra implements ChatRepository {
                     row.getInt("sender_id"),
                     row.getInt("receiver_id"),
                     row.getInstant("timestamp"),
-                    row.getString("message")
+                    row.getString("message"),
+                    row.getString("message_type")
             );
             System.out.println("Mapped message: " + message);
             return message;
@@ -74,7 +75,8 @@ public class ChatDAOCassandra implements ChatRepository {
                 row.getInt("sender_id"),
                 row.getInt("receiver_id"),
                 row.getInstant("timestamp"),
-                row.getString("message")
+                row.getString("message"),
+                row.getString("message_type")
         )) : Optional.empty();
     }
 }

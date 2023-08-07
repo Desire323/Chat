@@ -33,7 +33,7 @@ services:
       CASSANDRA_LOCAL_DC: datacenter1
       SERVICE_REGISTRY_URL: http://service-registry:8761/eureka
     ports:
-      - "8080:8080"
+      - "5002:8080"
     depends_on:
       - chat-db
     networks:
